@@ -1,0 +1,15 @@
+[
+{
+  "modid": "infusio",
+  "name": "Infusio",
+  "description": "A Mincecraft mod about infusing items.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["MrBBot"],
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
