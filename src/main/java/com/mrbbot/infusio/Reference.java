@@ -30,7 +30,8 @@ public class Reference {
     }
 
     public enum InfusioBlocks {
-        SCORCHED_STONE("scorchedStone", "scorched_stone");
+        SCORCHED_STONE("scorchedStone", "scorched_stone"),
+        PEDESTAL("pedestal", "pedestal");
 
         private String unlocalizedName;
         private String registryName;

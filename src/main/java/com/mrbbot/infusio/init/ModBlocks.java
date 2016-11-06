@@ -1,5 +1,6 @@
 package com.mrbbot.infusio.init;
 
+import com.mrbbot.infusio.blocks.BlockPedestal;
 import com.mrbbot.infusio.blocks.BlockScorchedStone;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -11,13 +12,16 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class ModBlocks {
 
     public static Block scorchedStone;
+    public static Block pedestal;
 
     public static void init() {
         scorchedStone = new BlockScorchedStone();
+        pedestal = new BlockPedestal();
     }
 
     public static void register() {
         registerBlock(scorchedStone);
+        registerBlock(pedestal);
     }
 
     private static void registerBlock(Block block) {
@@ -29,6 +33,7 @@ public class ModBlocks {
 
     public static void registerRenderers() {
         registerRender(scorchedStone);
+        registerRender(pedestal);
     }
 
     private static void registerRender(Block block) {
