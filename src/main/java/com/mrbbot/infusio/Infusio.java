@@ -1,5 +1,6 @@
 package com.mrbbot.infusio;
 
+import com.mrbbot.infusio.init.ModBlocks;
 import com.mrbbot.infusio.init.ModItems;
 import com.mrbbot.infusio.proxy.ICommonProxy;
 import net.minecraftforge.fml.common.Mod;
@@ -20,6 +21,9 @@ public class Infusio {
     public void preInit(FMLPreInitializationEvent event) {
         ModItems.init();
         ModItems.register();
+
+        ModBlocks.init();
+        ModBlocks.register();
     }
 
     @Mod.EventHandler

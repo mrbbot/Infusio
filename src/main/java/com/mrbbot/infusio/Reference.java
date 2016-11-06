@@ -28,4 +28,24 @@ public class Reference {
             return registryName;
         }
     }
+
+    public enum InfusioBlocks {
+        SCORCHED_STONE("scorchedStone", "scorched_stone");
+
+        private String unlocalizedName;
+        private String registryName;
+
+        InfusioBlocks(String unlocalizedName, String registryName) {
+            this.unlocalizedName = unlocalizedName;
+            this.registryName = registryName;
+        }
+
+        public String getUnlocalizedName() {
+            return unlocalizedName;
+        }
+
+        public String getRegistryName() {
+            return registryName;
+        }
+    }
 }
