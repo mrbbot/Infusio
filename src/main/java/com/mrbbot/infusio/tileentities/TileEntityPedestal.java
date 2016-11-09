@@ -42,19 +42,12 @@ public class TileEntityPedestal extends TileEntity implements IInventory {
     @Nullable
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
-        System.out.println("Getting update packet on " + (worldObj.isRemote ? "client" : "server"));
         return new SPacketUpdateTileEntity(pos, 1, writeToNBT(new NBTTagCompound()));
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-        System.out.println("Received update packet on " + (worldObj.isRemote ? "client" : "server"));
         readFromNBT(pkt.getNbtCompound());
-    }
-
-    private void forceUpdate() {
-        worldObj.notifyBlockUpdate(pos, getBlockType().getDefaultState(), getBlockType().getDefaultState(), 0);
-        markDirty();
     }
 
     @Override
@@ -93,7 +86,8 @@ public class TileEntityPedestal extends TileEntity implements IInventory {
             return;
         itemStack = stack;
 
-        forceUpdate();
+        worldObj.notifyBlockUpdate(pos, getBlockType().getDefaultState(), getBlockType().getDefaultState(), 0);
+        markDirty();
     }
 
     @Override

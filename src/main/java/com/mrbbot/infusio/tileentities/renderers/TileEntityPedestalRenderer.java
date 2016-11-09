@@ -24,8 +24,14 @@ public class TileEntityPedestalRenderer extends TileEntitySpecialRenderer<TileEn
             GlStateManager.enableLighting();
             GlStateManager.pushMatrix();
 
-            GlStateManager.translate(0.5, 1.3, 0.5);
+
+            double yOffset = Math.sin(Math.toRadians((System.currentTimeMillis() / 10) % 360));
+
+            GlStateManager.translate(0.5, 1.3 + (yOffset / 10), 0.5);
             GlStateManager.scale(0.4f, 0.4f, 0.4f);
+
+            long angle = (System.currentTimeMillis() / 20) % 360;
+            GlStateManager.rotate(angle, 0, 1, 0);
 
             Minecraft.getMinecraft().getRenderItem().renderItem(stack, ItemCameraTransforms.TransformType.NONE);
 
