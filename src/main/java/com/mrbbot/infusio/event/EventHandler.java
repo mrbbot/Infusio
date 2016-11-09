@@ -24,7 +24,7 @@ public class EventHandler {
                 entityItemScorcheable.motionX = item.motionX;
                 entityItemScorcheable.motionY = item.motionY;
                 entityItemScorcheable.motionZ = item.motionZ;
-                entityItemScorcheable.setPickupDelay(40);
+                entityItemScorcheable.setPickupDelay(item.cannotPickup() ? 40 : 0);
                 world.spawnEntityInWorld(entityItemScorcheable);
 
                 item.setDead();
