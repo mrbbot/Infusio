@@ -48,10 +48,12 @@ public class BlockPedestal extends Block implements ITileEntityProvider {
             if (tileEntity instanceof TileEntityPedestal) {
                 TileEntityPedestal tileEntityPedestal = (TileEntityPedestal) tileEntity;
                 if (tileEntityPedestal.getStackInSlot(0) == null) {
-                    ItemStack oneItem = heldItem.copy();
-                    oneItem.stackSize = 1;
-                    tileEntityPedestal.setInventorySlotContents(0, oneItem);
-                    heldItem.stackSize--;
+                    if(heldItem != null) {
+                        ItemStack oneItem = heldItem.copy();
+                        oneItem.stackSize = 1;
+                        tileEntityPedestal.setInventorySlotContents(0, oneItem);
+                        heldItem.stackSize--;
+                    }
                 } else {
                     EntityItem item = new EntityItem(worldIn, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, tileEntityPedestal.getStackInSlot(0));
                     item.setPickupDelay(0);
@@ -69,10 +71,12 @@ public class BlockPedestal extends Block implements ITileEntityProvider {
             TileEntity tileEntity = worldIn.getTileEntity(pos);
             if (tileEntity instanceof TileEntityPedestal) {
                 TileEntityPedestal tileEntityPedestal = (TileEntityPedestal) tileEntity;
-                EntityItem item = new EntityItem(worldIn, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, tileEntityPedestal.getStackInSlot(0));
-                item.setPickupDelay(0);
-                tileEntityPedestal.setInventorySlotContents(0, null);
-                worldIn.spawnEntityInWorld(item);
+                if(tileEntityPedestal.getStackInSlot(0) != null) {
+                    EntityItem item = new EntityItem(worldIn, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, tileEntityPedestal.getStackInSlot(0));
+                    item.setPickupDelay(0);
+                    tileEntityPedestal.clear();
+                    worldIn.spawnEntityInWorld(item);
+                }
             }
         }
         super.breakBlock(worldIn, pos, state);

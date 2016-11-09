@@ -4,18 +4,22 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
 import javax.annotation.Nullable;
 
 public class TileEntityPedestal extends TileEntity implements IInventory {
-    private ItemStack itemStack = null;
+    private ItemStack itemStack;
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
         if(itemStack != null) {
-            compound.setTag("item", itemStack.writeToNBT(new NBTTagCompound()));
+            NBTTagCompound tagCompound = new NBTTagCompound();
+            itemStack.writeToNBT(tagCompound);
+            compound.setTag("Item", tagCompound);
         }
         return compound;
     }
@@ -23,8 +27,34 @@ public class TileEntityPedestal extends TileEntity implements IInventory {
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
-        if(compound.hasKey("Item"))
+        if(compound.hasKey("Item")) {
             itemStack = ItemStack.loadItemStackFromNBT(compound.getCompoundTag("Item"));
+        } else {
+            itemStack = null;
+        }
+    }
+
+    @Override
+    public NBTTagCompound getUpdateTag() {
+        return writeToNBT(new NBTTagCompound());
+    }
+
+    @Nullable
+    @Override
+    public SPacketUpdateTileEntity getUpdatePacket() {
+        System.out.println("Getting update packet on " + (worldObj.isRemote ? "client" : "server"));
+        return new SPacketUpdateTileEntity(pos, 1, writeToNBT(new NBTTagCompound()));
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+        System.out.println("Received update packet on " + (worldObj.isRemote ? "client" : "server"));
+        readFromNBT(pkt.getNbtCompound());
+    }
+
+    private void forceUpdate() {
+        worldObj.notifyBlockUpdate(pos, getBlockType().getDefaultState(), getBlockType().getDefaultState(), 0);
+        markDirty();
     }
 
     @Override
@@ -62,6 +92,8 @@ public class TileEntityPedestal extends TileEntity implements IInventory {
         if(index > 0 || index < 0)
             return;
         itemStack = stack;
+
+        forceUpdate();
     }
 
     @Override
