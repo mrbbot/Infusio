@@ -3,6 +3,7 @@ package com.mrbbot.infusio;
 import com.mrbbot.infusio.event.EventHandler;
 import com.mrbbot.infusio.init.ModBlocks;
 import com.mrbbot.infusio.init.ModItems;
+import com.mrbbot.infusio.init.ModRecipes;
 import com.mrbbot.infusio.proxy.ICommonProxy;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -32,12 +33,13 @@ public class Infusio {
         ModBlocks.register();
 
         MinecraftForge.EVENT_BUS.register(new EventHandler());
-
     }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         proxy.init();
+
+        ModRecipes.register();
     }
 
     @Mod.EventHandler

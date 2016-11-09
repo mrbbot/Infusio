@@ -9,6 +9,7 @@ public class ItemActivationRod extends Item {
     public ItemActivationRod() {
         setUnlocalizedName(Reference.InfusioItems.ACTIVATION_ROD.getUnlocalizedName());
         setRegistryName(Reference.InfusioItems.ACTIVATION_ROD.getRegistryName());
+        setMaxStackSize(1);
     }
 
     @Override

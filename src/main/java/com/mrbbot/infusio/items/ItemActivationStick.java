@@ -9,6 +9,7 @@ public class ItemActivationStick extends Item {
     public ItemActivationStick() {
         setUnlocalizedName(Reference.InfusioItems.ACTIVATION_STICK.getUnlocalizedName());
         setRegistryName(Reference.InfusioItems.ACTIVATION_STICK.getRegistryName());
+        setMaxStackSize(1);
     }
 
     @Override
