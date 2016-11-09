@@ -5,6 +5,7 @@ import com.mrbbot.infusio.init.ModBlocks;
 import com.mrbbot.infusio.init.ModItems;
 import com.mrbbot.infusio.init.ModRecipes;
 import com.mrbbot.infusio.proxy.ICommonProxy;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -23,6 +24,8 @@ public class Infusio {
 
     @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
     public static ICommonProxy proxy;
+
+    public static final CreativeTabs CREATIVE_TAB = new InfusioTab();
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {

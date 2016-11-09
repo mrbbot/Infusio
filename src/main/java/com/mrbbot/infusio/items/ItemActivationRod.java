@@ -1,5 +1,6 @@
 package com.mrbbot.infusio.items;
 
+import com.mrbbot.infusio.Infusio;
 import com.mrbbot.infusio.Reference;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
@@ -10,6 +11,7 @@ public class ItemActivationRod extends Item {
         setUnlocalizedName(Reference.InfusioItems.ACTIVATION_ROD.getUnlocalizedName());
         setRegistryName(Reference.InfusioItems.ACTIVATION_ROD.getRegistryName());
         setMaxStackSize(1);
+        setCreativeTab(Infusio.CREATIVE_TAB);
     }
 
     @Override
