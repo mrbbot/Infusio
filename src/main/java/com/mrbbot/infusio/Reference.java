@@ -10,7 +10,8 @@ public class Reference {
 
     public enum InfusioItems {
         ACTIVATION_STICK("activationStick", "activation_stick"),
-        ACTIVATION_ROD("activationRod", "activation_rod");
+        ACTIVATION_ROD("activationRod", "activation_rod"),
+        SCORCHED_DUST("scorchedDust", "scorched_dust");
 
         private String unlocalizedName;
         private String registryName;
