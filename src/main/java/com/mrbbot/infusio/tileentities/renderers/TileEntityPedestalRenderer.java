@@ -22,23 +22,30 @@ public class TileEntityPedestalRenderer extends TileEntitySpecialRenderer<TileEn
 
             RenderHelper.enableStandardItemLighting();
             GlStateManager.enableLighting();
-            GlStateManager.pushMatrix();
 
-
-            double yOffset = Math.sin(Math.toRadians((System.currentTimeMillis() / 10) % 360));
-
-            GlStateManager.translate(0.5, 1.3 + (yOffset / 10), 0.5);
-            GlStateManager.scale(0.4f, 0.4f, 0.4f);
-
-            long angle = (System.currentTimeMillis() / 20) % 360;
-            GlStateManager.rotate(angle, 0, 1, 0);
-
-            Minecraft.getMinecraft().getRenderItem().renderItem(stack, ItemCameraTransforms.TransformType.NONE);
-
-            GlStateManager.popMatrix();
+            renderItemStack(stack, 0, 0, 0);
 
             GlStateManager.popMatrix();
             GlStateManager.popAttrib();
         }
+    }
+
+    private void renderItemStack(ItemStack itemStack, double xOffset, double yOffset, double zOffset) {
+        GlStateManager.pushMatrix();
+
+        double yOff = Math.sin(Math.toRadians((System.currentTimeMillis() / 10) % 360));
+        GlStateManager.translate(0.5 + xOffset, 1.3 + (yOff / 10) + yOffset, 0.5 + zOffset);
+
+        GlStateManager.pushMatrix();
+
+        long angle = (System.currentTimeMillis() / 20) % 360;
+        GlStateManager.rotate(angle, 0, 1, 0);
+
+        GlStateManager.scale(0.4f, 0.4f, 0.4f);
+
+        Minecraft.getMinecraft().getRenderItem().renderItem(itemStack, ItemCameraTransforms.TransformType.NONE);
+
+        GlStateManager.popMatrix();
+        GlStateManager.popMatrix();
     }
 }

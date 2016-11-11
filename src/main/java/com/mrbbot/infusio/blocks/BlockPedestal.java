@@ -2,6 +2,8 @@ package com.mrbbot.infusio.blocks;
 
 import com.mrbbot.infusio.Infusio;
 import com.mrbbot.infusio.Reference;
+import com.mrbbot.infusio.infusion.InfusionHandler;
+import com.mrbbot.infusio.init.ModItems;
 import com.mrbbot.infusio.tileentities.TileEntityPedestal;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
@@ -9,11 +11,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -31,11 +34,13 @@ public class BlockPedestal extends Block implements ITileEntityProvider {
         setCreativeTab(Infusio.CREATIVE_TAB);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isFullCube(IBlockState state) {
         return false;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;
@@ -47,6 +52,16 @@ public class BlockPedestal extends Block implements ITileEntityProvider {
             TileEntity tileEntity = worldIn.getTileEntity(pos);
             if (tileEntity instanceof TileEntityPedestal) {
                 TileEntityPedestal tileEntityPedestal = (TileEntityPedestal) tileEntity;
+
+                if(heldItem != null) {
+                    if(heldItem.getItem().equals(ModItems.activationStick) || heldItem.getItem().equals(ModItems.activationRod)) {
+                        boolean itemInfused = InfusionHandler.infuseWith(tileEntityPedestal);
+                        if(!itemInfused)
+                            worldIn.playSound(null, pos, SoundEvents.BLOCK_NOTE_BASS, SoundCategory.BLOCKS, 1.0f, 1.0f);
+                        return true;
+                    }
+                }
+
                 if (tileEntityPedestal.getStackInSlot(0) == null) {
                     if(heldItem != null) {
                         ItemStack oneItem = heldItem.copy();
