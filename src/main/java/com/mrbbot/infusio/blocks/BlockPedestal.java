@@ -3,6 +3,7 @@ package com.mrbbot.infusio.blocks;
 import com.mrbbot.infusio.Infusio;
 import com.mrbbot.infusio.Reference;
 import com.mrbbot.infusio.infusion.InfusionHandler;
+import com.mrbbot.infusio.infusion.InfusionRegistry;
 import com.mrbbot.infusio.init.ModItems;
 import com.mrbbot.infusio.tileentities.TileEntityPedestal;
 import net.minecraft.block.Block;
@@ -95,6 +96,28 @@ public class BlockPedestal extends Block implements ITileEntityProvider {
             }
         }
         super.breakBlock(worldIn, pos, state);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean hasComparatorInputOverride(IBlockState state) {
+        return true;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos) {
+        TileEntity tileEntity = worldIn.getTileEntity(pos);
+        if (tileEntity instanceof TileEntityPedestal) {
+            ItemStack stack = ((TileEntityPedestal) tileEntity).getStackInSlot(0);
+            if(stack != null) {
+                if(InfusionRegistry.isOutputItem(stack))
+                    return 2;
+                return 1;
+            }
+        }
+
+        return 0;
     }
 
     @Override

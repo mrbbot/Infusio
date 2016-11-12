@@ -14,6 +14,6 @@ public class ModRecipes {
         GameRegistry.addShapedRecipe(new ItemStack(ModBlocks.pedestal), "SPS", " S ", "SDS", 'S', ModBlocks.scorchedStone, 'P', Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE, 'D', ModItems.scorchedDust);
 
         InfusionRegistry.registerInfusion(new ItemStack(ModItems.activationRod), Items.BLAZE_ROD, Blocks.REDSTONE_BLOCK, Items.BLAZE_POWDER, Items.MAGMA_CREAM, Blocks.REDSTONE_BLOCK, Items.BLAZE_POWDER, Items.MAGMA_CREAM);
-        InfusionRegistry.registerInfusion(new ItemStack(Items.GLOWSTONE_DUST), Items.REDSTONE, Blocks.TORCH, Blocks.TORCH, Blocks.TORCH, Blocks.TORCH);
+        InfusionRegistry.registerInfusion(new ItemStack(Items.GLOWSTONE_DUST), Items.REDSTONE, Blocks.TORCH);
     }
 }

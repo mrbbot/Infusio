@@ -1,5 +1,6 @@
 package com.mrbbot.infusio.tileentities.renderers;
 
+import com.mrbbot.infusio.infusion.InfusionHandler;
 import com.mrbbot.infusio.tileentities.TileEntityPedestal;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -7,6 +8,8 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import org.lwjgl.opengl.GL11;
 
 public class TileEntityPedestalRenderer extends TileEntitySpecialRenderer<TileEntityPedestal> {
 
@@ -24,6 +27,24 @@ public class TileEntityPedestalRenderer extends TileEntitySpecialRenderer<TileEn
             GlStateManager.enableLighting();
 
             renderItemStack(stack, 0, 0, 0);
+
+            if(te.timeInfusing >= 0 && te.timeInfusing <= InfusionHandler.INFUSION_TIME) {
+                long currentTime = System.nanoTime();
+                if(te.lastTime != -1) {
+                    te.timeInfusing += currentTime - te.lastTime;
+                    te.lastTime = currentTime;
+                }
+
+                BlockPos pos = te.getPos();
+                double fraction = 1.0 - ((double) te.timeInfusing / (double) InfusionHandler.INFUSION_TIME);
+                for(InfusionHandler.InfusingItem infusingItem : te.infusingItems) {
+                    BlockPos origin = infusingItem.origin;
+                    double xOffset = (origin.getX() - pos.getX()) * fraction;
+                    double yOffset = (origin.getY() - pos.getY()) * fraction;
+                    double zOffset = (origin.getZ() - pos.getZ()) * fraction;
+                    renderItemStack(infusingItem.itemStack, xOffset, yOffset, zOffset);
+                }
+            }
 
             GlStateManager.popMatrix();
             GlStateManager.popAttrib();
