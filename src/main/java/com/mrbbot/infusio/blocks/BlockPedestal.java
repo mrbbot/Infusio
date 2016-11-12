@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -49,33 +50,31 @@ public class BlockPedestal extends Block implements ITileEntityProvider {
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if(!worldIn.isRemote) {
-            TileEntity tileEntity = worldIn.getTileEntity(pos);
-            if (tileEntity instanceof TileEntityPedestal) {
-                TileEntityPedestal tileEntityPedestal = (TileEntityPedestal) tileEntity;
+        TileEntity tileEntity = worldIn.getTileEntity(pos);
+        if (tileEntity != null && tileEntity instanceof TileEntityPedestal) {
+            TileEntityPedestal tileEntityPedestal = (TileEntityPedestal) tileEntity;
 
-                if(heldItem != null) {
-                    if(heldItem.getItem().equals(ModItems.activationStick) || heldItem.getItem().equals(ModItems.activationRod)) {
+            if(!worldIn.isRemote) {
+                if (heldItem != null) {
+                    if (heldItem.getItem().equals(ModItems.activationStick) || heldItem.getItem().equals(ModItems.activationRod)) {
                         boolean itemInfused = InfusionHandler.infuseWith(tileEntityPedestal);
-                        if(!itemInfused)
+                        if (!itemInfused)
                             worldIn.playSound(null, pos, SoundEvents.BLOCK_NOTE_BASS, SoundCategory.BLOCKS, 1.0f, 1.0f);
                         return true;
                     }
                 }
 
                 if (tileEntityPedestal.getStackInSlot(0) == null) {
-                    if(heldItem != null) {
+                    if (heldItem != null) {
                         ItemStack oneItem = heldItem.copy();
                         oneItem.stackSize = 1;
                         tileEntityPedestal.setInventorySlotContents(0, oneItem);
                         heldItem.stackSize--;
                     }
                 } else {
-                    EntityItem item = new EntityItem(worldIn, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, tileEntityPedestal.getStackInSlot(0));
-                    item.setPickupDelay(0);
-                    tileEntityPedestal.setInventorySlotContents(0, null);
-                    worldIn.spawnEntityInWorld(item);
+                    tileEntityPedestal.dropItems();
                 }
+
             }
         }
         return true;
@@ -83,15 +82,13 @@ public class BlockPedestal extends Block implements ITileEntityProvider {
 
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        if(!worldIn.isRemote) {
-            TileEntity tileEntity = worldIn.getTileEntity(pos);
-            if (tileEntity instanceof TileEntityPedestal) {
-                TileEntityPedestal tileEntityPedestal = (TileEntityPedestal) tileEntity;
-                if(tileEntityPedestal.getStackInSlot(0) != null) {
-                    EntityItem item = new EntityItem(worldIn, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, tileEntityPedestal.getStackInSlot(0));
-                    item.setPickupDelay(0);
-                    tileEntityPedestal.clear();
-                    worldIn.spawnEntityInWorld(item);
+        TileEntity tileEntity = worldIn.getTileEntity(pos);
+        if (tileEntity != null && tileEntity instanceof TileEntityPedestal) {
+            TileEntityPedestal tileEntityPedestal = (TileEntityPedestal) tileEntity;
+
+            if(!worldIn.isRemote) {
+                if (tileEntityPedestal.getStackInSlot(0) != null) {
+                    tileEntityPedestal.dropItems();
                 }
             }
         }

@@ -1,6 +1,7 @@
 package com.mrbbot.infusio.tileentities;
 
 import com.mrbbot.infusio.infusion.InfusionHandler;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
@@ -10,8 +11,10 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
@@ -21,7 +24,7 @@ public class TileEntityPedestal extends TileEntity implements IInventory, ITicka
     private ItemStack itemStack;
 
     public int timeInfusing = -1;
-    public ItemStack infusionOutput;
+    private ItemStack infusionOutput;
     public ArrayList<InfusionHandler.InfusingItem> infusingItems;
 
     @Override
@@ -128,20 +131,56 @@ public class TileEntityPedestal extends TileEntity implements IInventory, ITicka
                 int pitch = (int) Math.floor((double) timeInfusing / (InfusionHandler.NANOSECOND / 10));
                 if (pitch != lastPitch) {
                     float playingPitch = 1f + ((float)pitch / 8f);
-                    System.out.println(playingPitch);
                     worldObj.playSound(null, pos, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.BLOCKS, 1.0f, playingPitch);
                     lastPitch = pitch;
                 }
             }
 
-            if(!worldObj.isRemote && timeInfusing >= InfusionHandler.INFUSION_TIME) {
-                itemStack = ItemStack.copyItemStack(infusionOutput);
-                timeInfusing = -1;
-                infusionOutput = null;
-                infusingItems = null;
-                forceUpdate();
+            if(timeInfusing >= InfusionHandler.INFUSION_TIME) {
+                if(!worldObj.isRemote) {
+                    itemStack = ItemStack.copyItemStack(infusionOutput);
+                    stopInfusion(false);
+                    forceUpdate();
+                } else {
+                    worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, pos.getX() + 0.5, pos.getY() + 1.3, pos.getZ() + 0.5, 0, 0.05, 0);
+                }
             }
         }
+    }
+
+    public void dropItems() {
+        dropItem(ItemStack.copyItemStack(itemStack), 0, 0, 0);
+        itemStack = null;
+
+        if(timeInfusing != -1) {
+            double fraction = 1.0 - ((double) timeInfusing / (double) InfusionHandler.INFUSION_TIME);
+            for (InfusionHandler.InfusingItem infusingItem : infusingItems) {
+                BlockPos origin = infusingItem.origin;
+                double xOffset = (origin.getX() - pos.getX()) * fraction;
+                double yOffset = (origin.getY() - pos.getY()) * fraction;
+                double zOffset = (origin.getZ() - pos.getZ()) * fraction;
+                dropItem(infusingItem.itemStack, xOffset, yOffset, zOffset);
+            }
+
+            stopInfusion(true);
+        }
+
+        forceUpdate();
+    }
+
+    private void stopInfusion(boolean forced) {
+        worldObj.playSound(null, pos, forced ? SoundEvents.ENTITY_GENERIC_EXPLODE : SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 1.0f, 1.0f);
+
+        timeInfusing = -1;
+        infusionOutput = null;
+        infusingItems = null;
+    }
+
+    private void dropItem(ItemStack stack, double xOffset, double yOffset, double zOffset) {
+        double yOff = Math.sin(Math.toRadians((System.currentTimeMillis() / 10) % 360));
+        EntityItem item = new EntityItem(worldObj, pos.getX() + xOffset + 0.5, pos.getY() + yOffset + 1.3 + (yOff / 10), pos.getZ() + zOffset + 0.5, stack);
+        item.setPickupDelay(0);
+        worldObj.spawnEntityInWorld(item);
     }
 
     private void forceUpdate() {
@@ -167,8 +206,14 @@ public class TileEntityPedestal extends TileEntity implements IInventory, ITicka
     public ItemStack decrStackSize(int index, int count) {
         if(index > 0 || index < 0)
             return null;
+        ItemStack itemStackCount = ItemStack.copyItemStack(itemStack);
+        itemStackCount.stackSize = count;
         itemStack.stackSize -= count;
-        return itemStack;
+        if(itemStack.stackSize == 0) {
+            itemStack = null;
+            forceUpdate();
+        }
+        return itemStackCount;
     }
 
     @Nullable
@@ -176,6 +221,7 @@ public class TileEntityPedestal extends TileEntity implements IInventory, ITicka
     public ItemStack removeStackFromSlot(int index) {
         ItemStack copy = itemStack.copy();
         itemStack = null;
+        forceUpdate();
         return copy;
     }
 
@@ -210,9 +256,7 @@ public class TileEntityPedestal extends TileEntity implements IInventory, ITicka
 
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
-        if(index > 0 || index < 0)
-            return false;
-        return itemStack == null;
+        return !(index > 0 || index < 0) && itemStack == null;
     }
 
     @Override
