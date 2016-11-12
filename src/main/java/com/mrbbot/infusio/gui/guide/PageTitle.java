@@ -10,12 +10,12 @@ import net.minecraft.item.ItemStack;
 
 import static net.minecraft.client.gui.Gui.drawModalRectWithCustomSizedTexture;
 
-class PageCover implements IPage {
+class PageTitle implements IPage {
     private final static ItemStack PEDESTAL = new ItemStack(ModBlocks.pedestal, 1);
 
     private final boolean isFrontPage;
 
-    PageCover(boolean isFrontPage) {
+    PageTitle(boolean isFrontPage) {
         this.isFrontPage = isFrontPage;
     }
 

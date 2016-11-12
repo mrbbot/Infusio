@@ -20,7 +20,9 @@ class PageDouble implements IPage {
         int xStart = (width / 2) - (278 / 2);
         int yStart = (height / 2) - (180 / 2);
         drawModalRectWithCustomSizedTexture(xStart, yStart, 0, 0, 278, 180, 512, 512);
-        left.renderPage(gui, fontRendererObj, itemRender, 114, 138, mouseX, mouseY, xStart + 18, yStart + 14);
-        right.renderPage(gui, fontRendererObj, itemRender, 114, 138, mouseX, mouseY, xStart + 146, yStart + 14);
+        if(left != null)
+            left.renderPage(gui, fontRendererObj, itemRender, 114, 138, mouseX, mouseY, xStart + 18, yStart + 14);
+        if(right != null)
+            right.renderPage(gui, fontRendererObj, itemRender, 114, 138, mouseX, mouseY, xStart + 146, yStart + 14);
     }
 }
