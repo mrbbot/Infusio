@@ -8,10 +8,13 @@ public class Reference {
     static final String CLIENT_PROXY_CLASS = "com.mrbbot.infusio.proxy.ClientProxy";
     static final String SERVER_PROXY_CLASS = "com.mrbbot.infusio.proxy.ServerProxy";
 
+    public static final int GUI_INFUSERS_GUIDE = 0;
+
     public enum InfusioItems {
         ACTIVATION_STICK("activationStick", "activation_stick"),
         ACTIVATION_ROD("activationRod", "activation_rod"),
-        SCORCHED_DUST("scorchedDust", "scorched_dust");
+        SCORCHED_DUST("scorchedDust", "scorched_dust"),
+        INFUSERS_GUIDE("infusersGuide", "infusers_guide");
 
         private String unlocalizedName;
         private String registryName;

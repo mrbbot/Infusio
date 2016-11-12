@@ -1,8 +1,12 @@
 item.activationStick.name=Activation Stick
 item.activationRod.name=Rod of Activation
 item.scorchedDust.name=Scorched Dust
+item.infusersGuide.name=The Infuser's Guide
 
 tile.scorchedStone.name=Scorched Stone
 tile.pedestal.name=Pedestal
 
 itemGroup.tabInfusio=Infusio
+
+infusionGuide.page1=Yay! It would be nice if this were to load. That would be very, very, very, very cool. This seems long enough.
+infusionGuide.page2=This will be where infusions and stuff will go.
