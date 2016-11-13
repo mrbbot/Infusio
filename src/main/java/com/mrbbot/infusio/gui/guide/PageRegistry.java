@@ -17,12 +17,14 @@ public class PageRegistry {
         ArrayList<Section> sections = new ArrayList<Section>();
 
         sections.add(new Section(new ItemStack(ModItems.activationStick), "Activation Stick",
+                new PageCrafting(ModRecipes.craftingActivationStick),
                 new PageInfusion(ModRecipes.infusionGlowstoneDust),
                 new PageText("Activate stuff with sticks"),
                 new PageText("Much fun!")));
 
         sections.add(new Section(new ItemStack(ModBlocks.pedestal), "Pedestal",
                 new PageText("PEDESTALS OMG"),
+                new PageCrafting(ModRecipes.craftingPedestal),
                 new PageInfusion(ModRecipes.infusionCrafting),
                 new PageText("More pedestals"),
                 new PageText("YAY!!!!")));

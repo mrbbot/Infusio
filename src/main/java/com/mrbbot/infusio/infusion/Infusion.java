@@ -1,5 +1,6 @@
 package com.mrbbot.infusio.infusion;
 
+import com.mrbbot.infusio.init.ModRecipes;
 import com.mrbbot.infusio.tileentities.TileEntityPedestal;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -17,8 +18,8 @@ public class Infusion {
     Infusion(ItemStack output, boolean advanced, Object main, Object... inputs) {
         this.output = output;
         this.advanced = advanced;
-        this.main = convertToItemStack(main);
-        this.inputs = convertToItemStacks(inputs);
+        this.main = ModRecipes.convertToItemStack(main);
+        this.inputs = ModRecipes.convertToItemStacks(inputs);
     }
 
     public ItemStack getOutput() {
@@ -35,27 +36,6 @@ public class Infusion {
 
     public ItemStack[] getInputs() {
         return inputs;
-    }
-
-    private ItemStack convertToItemStack(Object item) {
-        if(item instanceof Item) {
-            return new ItemStack((Item) item);
-        } else if(item instanceof Block) {
-            return new ItemStack((Block) item);
-        }
-
-        return new ItemStack(Blocks.AIR, 0);
-    }
-
-    private ItemStack[] convertToItemStacks(Object[] items) {
-        ArrayList<ItemStack> itemStacksList = new ArrayList<ItemStack>();
-
-        for(Object item : items)
-            itemStacksList.add(convertToItemStack(item));
-
-        ItemStack[] itemStacks = new ItemStack[itemStacksList.size()];
-        itemStacksList.toArray(itemStacks);
-        return itemStacks;
     }
 
     private int indexOfItem(ArrayList<TileEntityPedestal> availablePedestals, ArrayList<Integer> indicesUsed, ItemStack item) {
