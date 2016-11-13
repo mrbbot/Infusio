@@ -20,9 +20,12 @@ class PageTitle implements IPage {
     }
 
     @Override
-    public void renderPage(GuiInfusersGuide gui, FontRenderer fontRendererObj, RenderItem itemRender, int width, int height, int mouseX, int mouseY) {
+    public void renderPageBackground(int width, int height) {
         drawModalRectWithCustomSizedTexture((width / 2) - (146 / 2), (height / 2) - (180 / 2), 0, 180, 146, 180, 512, 512);
+    }
 
+    @Override
+    public void renderPage(GuiInfusersGuide gui, FontRenderer fontRendererObj, RenderItem itemRender, int width, int height, int mouseX, int mouseY) {
         if(isFrontPage) {
             GlStateManager.pushMatrix();
             GlStateManager.scale(2, 2, 2);

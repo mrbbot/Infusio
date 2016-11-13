@@ -7,11 +7,13 @@ import java.util.ArrayList;
 
 public class InfusionRegistry {
     static ArrayList<Infusion> infusions = new ArrayList<Infusion>();
-    static ArrayList<Item> outputItems = new ArrayList<Item>();
+    private static ArrayList<Item> outputItems = new ArrayList<Item>();
 
-    public static void registerInfusion(ItemStack output, Object main, Object... inputs) {
-        infusions.add(new Infusion(output, main, inputs));
+    public static Infusion registerInfusion(ItemStack output, boolean advanced, Object main, Object... inputs) {
+        Infusion infusion = new Infusion(output, advanced, main, inputs);
+        infusions.add(infusion);
         outputItems.add(output.getItem());
+        return infusion;
     }
 
     public static boolean isOutputItem(ItemStack item) {

@@ -9,6 +9,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 
@@ -20,7 +21,7 @@ public class GuiInfusersGuide extends GuiScreen {
     private static final int BUTTON_NAV_BACK = 1;
     private static final int BUTTON_CONTENTS = 2;
 
-    private final static ResourceLocation INFUSERS_GUIDE = new ResourceLocation("infusio", "textures/gui/infusers_guide.png");
+    public final static ResourceLocation INFUSERS_GUIDE = new ResourceLocation("infusio", "textures/gui/infusers_guide.png");
     private int currentPageIndex = 0;
     private IPage currentPage;
 
@@ -39,7 +40,7 @@ public class GuiInfusersGuide extends GuiScreen {
             ArrayList<PageRegistry.Link> contents = PageRegistry.getContents();
             int buttonX = (width / 2) - (278 / 2) + 18;
             int buttonY = (height / 2) - (180 / 2) + 14;
-            for(PageRegistry.Link link : contents) {
+            for (PageRegistry.Link link : contents) {
                 buttonList.add(new ContentsButton(link, buttonX, buttonY));
                 buttonY += 20;
             }
@@ -66,12 +67,23 @@ public class GuiInfusersGuide extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
+
         GlStateManager.color(1, 1, 1, 1);
         mc.getTextureManager().bindTexture(INFUSERS_GUIDE);
+        currentPage.renderPageBackground(width, height);
+
+        for(GuiButton button : buttonList)
+            button.drawButton(mc, mouseX, mouseY);
 
         currentPage.renderPage(this, fontRendererObj, itemRender, width, height, mouseX, mouseY);
+    }
 
-        super.drawScreen(mouseX, mouseY, partialTicks);
+    public void doRenderItem(ItemStack itemStack, int x, int y) {
+        itemRender.renderItemIntoGUI(itemStack, x, y);
+    }
+
+    public void doRenderTooltip(ItemStack itemStack, int x, int y) {
+        renderToolTip(itemStack, x, y);
     }
 
     @Override
@@ -109,7 +121,6 @@ public class GuiInfusersGuide extends GuiScreen {
 
         @Override
         public void drawButton(Minecraft mc, int mouseX, int mouseY) {
-            mc.getTextureManager().bindTexture(GuiInfusersGuide.INFUSERS_GUIDE);
             this.hovered = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
             this.mouseDragged(mc, mouseX, mouseY);
             drawModalRectWithCustomSizedTexture(xPosition, yPosition, this.hovered ? 23 : 0, forward ? 360 : 373, 18, 10, 512, 512);
@@ -129,8 +140,10 @@ public class GuiInfusersGuide extends GuiScreen {
             this.hovered = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
             this.mouseDragged(mc, mouseX, mouseY);
             RenderHelper.enableGUIStandardItemLighting();
+            GlStateManager.color(1, 1, 1, 1);
             itemRender.renderItemIntoGUI(link.getSection().getItemStack(), xPosition, yPosition + 2);
             fontRendererObj.drawString((hovered ? ChatFormatting.ITALIC : ChatFormatting.RESET) + link.getSection().getTitle() + ChatFormatting.RESET, xPosition + 20, yPosition + 6, 0, false);
+            RenderHelper.disableStandardItemLighting();
         }
 
         int getLinkedPageIndex() {

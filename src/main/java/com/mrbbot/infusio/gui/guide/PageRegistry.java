@@ -3,6 +3,7 @@ package com.mrbbot.infusio.gui.guide;
 import com.mrbbot.infusio.Infusio;
 import com.mrbbot.infusio.init.ModBlocks;
 import com.mrbbot.infusio.init.ModItems;
+import com.mrbbot.infusio.init.ModRecipes;
 import net.minecraft.item.ItemStack;
 import org.apache.logging.log4j.Level;
 
@@ -16,16 +17,19 @@ public class PageRegistry {
         ArrayList<Section> sections = new ArrayList<Section>();
 
         sections.add(new Section(new ItemStack(ModItems.activationStick), "Activation Stick",
+                new PageInfusion(ModRecipes.infusionGlowstoneDust),
                 new PageText("Activate stuff with sticks"),
                 new PageText("Much fun!")));
 
         sections.add(new Section(new ItemStack(ModBlocks.pedestal), "Pedestal",
                 new PageText("PEDESTALS OMG"),
+                new PageInfusion(ModRecipes.infusionCrafting),
                 new PageText("More pedestals"),
                 new PageText("YAY!!!!")));
 
         sections.add(new Section(new ItemStack(ModItems.activationRod), "Rod of Activation",
                 new PageText("The all mighty rod of activation"),
+                new PageInfusion(ModRecipes.infusionActivationRod),
                 new PageText("Shinny...."),
                 new PageText("It used to set things on fire")));
 

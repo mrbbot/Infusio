@@ -16,10 +16,16 @@ class PageDouble implements IPage {
     }
 
     @Override
-    public void renderPage(GuiInfusersGuide gui, FontRenderer fontRendererObj, RenderItem itemRender, int width, int height, int mouseX, int mouseY) {
+    public void renderPageBackground(int width, int height) {
         int xStart = (width / 2) - (278 / 2);
         int yStart = (height / 2) - (180 / 2);
         drawModalRectWithCustomSizedTexture(xStart, yStart, 0, 0, 278, 180, 512, 512);
+    }
+
+    @Override
+    public void renderPage(GuiInfusersGuide gui, FontRenderer fontRendererObj, RenderItem itemRender, int width, int height, int mouseX, int mouseY) {
+        int xStart = (width / 2) - (278 / 2);
+        int yStart = (height / 2) - (180 / 2);
         if(left != null)
             left.renderPage(gui, fontRendererObj, itemRender, 114, 138, mouseX, mouseY, xStart + 18, yStart + 14);
         if(right != null)

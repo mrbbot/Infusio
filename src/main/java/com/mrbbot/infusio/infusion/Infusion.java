@@ -8,15 +8,33 @@ import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 
-class Infusion {
-    ItemStack output;
+public class Infusion {
+    private ItemStack output;
+    private boolean advanced;
     private ItemStack main;
     private ItemStack[] inputs;
 
-    Infusion(ItemStack output, Object main, Object... inputs) {
+    Infusion(ItemStack output, boolean advanced, Object main, Object... inputs) {
         this.output = output;
+        this.advanced = advanced;
         this.main = convertToItemStack(main);
         this.inputs = convertToItemStacks(inputs);
+    }
+
+    public ItemStack getOutput() {
+        return output;
+    }
+
+    public boolean isAdvanced() {
+        return advanced;
+    }
+
+    public ItemStack getMain() {
+        return main;
+    }
+
+    public ItemStack[] getInputs() {
+        return inputs;
     }
 
     private ItemStack convertToItemStack(Object item) {

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class InfusionHandler {
     private static final int PEDESTAL_RANGE = 5;
     public static final int NANOSECOND = 1000000000;
-    public static final int INFUSION_TIME = (int) (6 * NANOSECOND);
+    public static final int INFUSION_TIME = (int) (0.5 * NANOSECOND);
 
     public static class InfusingItem {
         public BlockPos origin;
@@ -69,7 +69,7 @@ public class InfusionHandler {
                     usedPedestal.setInventorySlotContents(0, null);
                 }
 
-                pedestal.setInfusion(ItemStack.copyItemStack(infusion.output), infusingItems);
+                pedestal.setInfusion(ItemStack.copyItemStack(infusion.getOutput()), infusingItems);
                 return true;
             }
         }
